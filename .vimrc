@@ -67,8 +67,8 @@ set wildmenu
 " 背景色に合わせたカラー
 set background=dark
 
-" 小文字のみで検索したときに大文字小文字を無視する
-set smartcase
+" スクロールする時に下が見えるようにする
+set scrolloff=3
 
 " 対応する括弧やブレースを表示する
 set showmatch
@@ -91,6 +91,16 @@ set showcmd
 " 検索時に英大小文字の区別を無視する
 set ignorecase
 
+" ただし大文字も含めた検索の場合はその通りに検索する
+set smartcase
+
+" ウィンドウの幅より長い行は折り返され、次の行に続けて表示される
+set wrap
+
+" ビープ音を消す
+set vb t_vb=
+set novisualbell
+
 " コマンドラインモードで<Tab>キーによるファイル名補完を有効にする
 set wildmenu
 
@@ -103,4 +113,24 @@ set shiftwidth=2
 " 文頭文末のカーソル折り返しを有効化
 set whichwrap=b,s,h,l,<,>,[,]
 
+" マウスモード有効
+" set mouse=a
 
+" クリップボードにコピー
+set clipboard=unnamed,autoselect
+
+" 全角スペースのハイライトを設定
+function! ZenkakuSpace()
+  highlight ZenkakuSpace cterm=underline ctermfg=darkgrey gui=underline guifg=darkgrey
+endfunction
+
+if has('syntax')
+  augroup ZenkakuSpace
+    autocmd!
+    " ZenkakuSpaceをカラーファイルで設定するなら次の行は削除
+    autocmd ColorScheme       * call ZenkakuSpace()
+    " 全角スペースのハイライト指定
+    autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
+  augroup END
+  call ZenkakuSpace()
+endif
